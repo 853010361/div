@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="微信/css/base.css"/>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<style>
+			.div1,.div2,.div3,.div4{
+				width: 200px;
+				height: 200px;
+				position: absolute;
+				font-size: 70px;
+			}
+			.div1,.div3{
+				background-color: #00aa7f;
+			}
+			.div2,.div4{
+				background-color: #55ff00;
+			}
+			#app{
+				width: 100%;
+				height: 1000px;
+			}
+			button{
+				width: 60px;
+				height: 20px;
+				top: 200px;
+				position: relative;
+				float: left;
+			}
+			canvas{
+				position: absolute;
+			}
+			.div1{
+				top: 100px;
+				left: 100px;
+			}
+			.div2{
+				top: 350px;
+				left: 350px;
+			}
+			.div3{
+				top: 350px;
+				left: 650px;
+			}
+			.div4{
+				top: 650px;
+				left: 650px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<canvas id="art1" width="2000px" height="4000px"></canvas>	
+			<div class="div1" v-drag @mousemove="art()" @mousedown="number(1)">我是1</div>
+			<div class="div2" v-drag @mousemove="art()" @mousedown="number(2)">我是2</div>
+			<div class="div3" v-drag @mousemove="art()" @mousedown="number(3)">我是3</div>
+			<div class="div4" v-drag @mousemove="art()" @mousedown="number(4)">我是4</div>
+			<button @click="on(1)">我是选中</button><button @click="on(0)">我是拖动</button>
+		</div>
+	</body>
+	
+	<script>
+		new Vue({
+			el: "#app",
+			data:{
+				DivOne:document.querySelector(".div1"),
+				DivTwo:document.querySelector(".div2"),
+				num:"1",
+				mod:"0",
+			},
+			methods:{
+				art:function(){
+					var one=this.DivOne;
+					var two=this.DivTwo;
+					var c=document.getElementById("art1");
+					var ctx=c.getContext("2d");
+					
+					c.height=c.height;
+					ctx.moveTo(one.getBoundingClientRect().left+100,one.getBoundingClientRect().top+100);
+					ctx.lineTo(two.getBoundingClientRect().left+100,two.getBoundingClientRect().top+100);
+					ctx.stroke();
+				},
+				number:function(n){
+					if(this.mod==1){
+						switch(n)
+						{
+							case 1:
+								if(this.num==1){
+									this.num=0;
+									this.DivOne=document.querySelector(".div1");
+								}else{
+									this.num=1;
+									this.DivTwo=document.querySelector(".div1");
+								}
+								break;
+								
+							case 2:
+								if(this.num==1){
+									this.num=0;
+									this.DivOne=document.querySelector(".div2");
+								}else{
+									this.num=1;
+									this.DivTwo=document.querySelector(".div2");
+								}
+								break;
+								
+							case 3:
+								if(this.num==1){
+									this.num=0;
+									this.DivOne=document.querySelector(".div3");
+								}else{
+									this.num=1;
+									this.DivTwo=document.querySelector(".div3");
+								}
+								break;
+								
+							case 4:
+								if(this.num==1){
+									this.num=0;
+									this.DivOne=document.querySelector(".div4");
+								}else{
+									this.num=1;
+									this.DivTwo=document.querySelector(".div4");
+								}
+								break;
+						}
+					}else{
+						
+					}
+				},
+				
+				on:function(e){
+					if(e==1){
+						this.mod=1;
+						console.log(this.mod);
+					}else{
+						this.mod=0;
+						console.log(this.mod);
+					}
+				}
+			},
+			directives: {
+				drag(el, bindings) {
+				  el.onmousedown = function(e) {
+					var disx = e.pageX - el.offsetLeft
+					var disy = e.pageY - el.offsetTop
+					document.onmousemove = function (e) {
+					  el.style.left = e.pageX - disx + 'px'
+					  el.style.top = e.pageY - disy + 'px'
+					}
+					document.onmouseup = function() {
+					  document.onmousemove = document.onmouseup = null
+					}
+				  }
+				}
+			 },
+			watch:{
+
+			}
+		})
+	</script>
+</html>
